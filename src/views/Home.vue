@@ -31,7 +31,6 @@ import getData from '@/dataProcessing';
 export default {
   name: 'Home',
   components: {
-    // HelloWorld,
   },
   data: () => ({
     words: {
@@ -111,15 +110,10 @@ ul {
   display: block;
 }
 .verse-nb {
-  /* vertical-align: super; */
   margin-right: 10px;
   font-family: Helvetica, Arial, sans-serif;
   font-size: 15px;
   font-weight: bold;
-  /* line-height: 0; */
-  /* position: relative; */
-  /* bottom: 0px; */
-  /* border: 1px solid orange; */
   width: 30px;
   text-align: right;
 }
@@ -149,7 +143,6 @@ ul {
 }
 
 .words-col {
-  /* border: 1px solid purple; */
   display: flex;
 }
 </style>
