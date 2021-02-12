@@ -14,7 +14,7 @@
           <div class="words-col">
             <ul >
               <li v-for="(word, w) in words[chapter][verse]" :key="w">
-                <b>{{ word.greek }}</b>: {{ word.english }}
+                <b>{{ word.greek }}</b>  {{ word.english }} ({{ word.countsBook }}, {{ word.countsNT }})
               </li>
             </ul>
           </div>
@@ -33,57 +33,13 @@ export default {
   components: {
   },
   data: () => ({
-    words: {
-      1: {
-        5: [
-          {
-            book: '44_Jhn',
-            chapter: 1,
-            verse: 5,
-            greek: 'σκοτία',
-            english: 'darkness',
-            countsNT: 16,
-            countsBook: 8,
-          },
-          {
-            book: '44_Jhn',
-            chapter: 1,
-            verse: 5,
-            greek: 'σκοτία',
-            english: 'darkness',
-            countsNT: 16,
-            countsBook: 8,
-          },
-        ],
-      },
-      2: {
-        2: [
-          {
-            book: '44_Jhn',
-            chapter: 2,
-            verse: 5,
-            greek: 'καταλαμβάνω',
-            english: 'to take/realize',
-            countsNT: 13,
-            countsBook: 2,
-          },
-        ],
-        15: [
-          {
-            book: '44_Jhn',
-            chapter: 2,
-            verse: 5,
-            greek: 'καταλαμβάνω',
-            english: 'to take/realize',
-            countsNT: 13,
-            countsBook: 2,
-          },
-        ],
-      },
-    },
+    words: {},
+    loading: true,
   }),
   async created() {
+    console.log('loading');
     this.words = await getData();
+    console.log('finished loading');
   },
 };
 </script>

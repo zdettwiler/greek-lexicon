@@ -26,9 +26,9 @@ function uniqueWordsCounts(words) {
  *
  * @param {Object} words
  */
-function rareUniqueWordsCounts(words) {
+function rareUniqueWordsCounts(words, maxCount) {
   return Object.values(words).reduce((acc, cur) => {
-    if (cur.countsNT <= 30) {
+    if (cur.countsNT <= maxCount) {
       acc[cur.greek] = cur;
     }
 
@@ -39,6 +39,7 @@ function rareUniqueWordsCounts(words) {
 export default async function getData() {
   let data;
   try {
+    // eslint-disable-next-line max-len
     data = await axios.get('https://raw.githubusercontent.com/tyndale/STEPBible-Data/master/TAGNT%20-%20Translators%20Amalgamated%20Greek%20NT%20-%20STEPBible.org%20CC-BY.txt');
   } catch (e) { console.log(e, data); }
 
@@ -86,7 +87,7 @@ export default async function getData() {
   console.log('Unique John Words', Object.keys(uniqueJohnWords).length, uniqueJohnWords);
 
   // all rare unique greek words and their counts in John
-  const rareUniqueJohnWords = rareUniqueWordsCounts(uniqueJohnWords);
+  const rareUniqueJohnWords = rareUniqueWordsCounts(uniqueJohnWords, 1000);
   console.log('Rare Unique John Words', Object.keys(rareUniqueJohnWords).length);
 
   // group all unique words into verses
