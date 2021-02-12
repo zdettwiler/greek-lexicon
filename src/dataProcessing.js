@@ -3,6 +3,7 @@ import axios from 'axios';
 /**
  *
  * @param {Array} words
+ * @returns {Object} shape { greek: { ... countsBook: X }, }
  */
 function uniqueWordsCounts(words) {
   return words.reduce((acc, cur) => {
@@ -23,17 +24,20 @@ function uniqueWordsCounts(words) {
 }
 
 /**
- *
- * @param {Object} words
+ * Reduce words array to only the rare words.
+ * @param {Array} words
+ * @param {Integer} maxCount
+ * @returns {Array}
  */
-function rareUniqueWordsCounts(words, maxCount) {
-  return Object.values(words).reduce((acc, cur) => {
+function rareWords(words, maxCount) {
+  return words.reduce((acc, cur) => {
     if (cur.countsNT <= maxCount) {
-      acc[cur.greek] = cur;
+      // acc[cur.greek] = cur;
+      acc.push(cur);
     }
 
     return acc;
-  }, {});
+  }, []);
 }
 
 export default async function getData() {
@@ -83,29 +87,30 @@ export default async function getData() {
   console.log('John', johnWords.length, johnWords[0]);
 
   // all unique greek words and their counts in John
-  const uniqueJohnWords = uniqueWordsCounts(johnWords);
-  console.log('Unique John Words', Object.keys(uniqueJohnWords).length, uniqueJohnWords);
+  const uniqueWordsJohn = uniqueWordsCounts(johnWords);
+  console.log('Unique John Words', Object.keys(uniqueWordsJohn).length, uniqueWordsJohn);
 
-  // all rare unique greek words and their counts in John
-  const rareUniqueJohnWords = rareUniqueWordsCounts(uniqueJohnWords, 1000);
-  console.log('Rare Unique John Words', Object.keys(rareUniqueJohnWords).length);
+  // only rare John words and their counts
+  const rareJohnWords = rareWords(johnWords, 50);
+  console.log('Rare Unique John Words', Object.keys(rareJohnWords).length);
 
-  // group all unique words into verses
-  const groupedRareUniqueJohnWords = Object.values(rareUniqueJohnWords).reduce((book, word) => {
+  // group all words into verses
+  const groupedRareUniqueJohnWords = rareJohnWords.reduce((book, word) => {
     const bookEdit = book;
     if (bookEdit[word.chapter]) {
       // group by verse
-      if (bookEdit[word.chapter][word.verse]) {
+      if (bookEdit[word.chapter][word.verse]
+      && !bookEdit[word.chapter][word.verse].find((w) => w.greek === word.greek)) {
         bookEdit[word.chapter][word.verse] = [
           ...bookEdit[word.chapter][word.verse],
-          word,
+          uniqueWordsJohn[word.greek],
         ];
       } else {
-        bookEdit[word.chapter][word.verse] = [word];
+        bookEdit[word.chapter][word.verse] = [uniqueWordsJohn[word.greek]];
       }
     } else {
       bookEdit[word.chapter] = {
-        [word.verse]: [word],
+        [word.verse]: [uniqueWordsJohn[word.greek]],
       };
     }
 
